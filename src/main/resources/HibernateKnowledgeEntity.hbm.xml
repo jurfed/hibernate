@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="entities.HibernateKnowledgeEntity" table="HIBERNATE_KNOWLEDGE">
+        <meta attribute="class-description">
+            This class contains the user detail
+        </meta>
+
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+            <generator class="identity"/>
+        </id>
+
+        <property name="knowledgeName">
+            <column name="KNOWLEDGE_NAME" sql-type="varchar(50)" length="50" not-null="false"/>
+        </property>
+
+        <property name="commentariy">
+            <column name="comment" sql-type="varchar(50)" length="50" not-null="false"/>
+        </property>
+    </class>
+</hibernate-mapping>
