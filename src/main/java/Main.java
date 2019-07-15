@@ -11,10 +11,7 @@ import org.hibernate.cfg.Configuration;
 
 import javax.persistence.metamodel.EntityType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
     private static final SessionFactory ourSessionFactory;
@@ -77,7 +74,7 @@ public class Main {
         System.out.println("after modifivation 2: \n");
         main.developersList();
 
-        //4 delete developer frim bd
+        //4 delete developer from bd
         session = getSession();
         tx = session.beginTransaction();
         session.delete(hibernateDevelopersEntity);
@@ -107,16 +104,20 @@ public class Main {
 
         query = session.createQuery("from HibernateDevelopersEntity");
         HibernateDevelopersEntity vasa = (HibernateDevelopersEntity) query.list().get(0);
-        vasa.setProjects(vasaProjects);
-        session.update(vasa);
+        Optional<List<HibernateProjectsEntity>> optional = Optional.of(vasa.getProjects());
+
+        if(!optional.isPresent()){
+            vasa.setProjects(vasaProjects);
+            session.update(vasa);
+        }
 
         tx.commit();
         session.close();
 
-        System.out.println("with projects: \n");
+        System.out.println("with project's list: \n");
         main.developersList();
 
-        //5 add projects <Map/>
+        //6 add knowledges <Map/>
         session = getSession();
         tx = session.beginTransaction();
 
@@ -134,7 +135,7 @@ public class Main {
         tx.commit();
         session.close();
 
-        System.out.println("with projects: \n");
+        System.out.println("with knowledge's map: \n");
         main.developersList();
 
         System.out.println();
