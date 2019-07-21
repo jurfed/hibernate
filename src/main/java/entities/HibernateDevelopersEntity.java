@@ -15,26 +15,37 @@ public class HibernateDevelopersEntity {
     private HibernateSpecialitiesEntity hibernateSpecialitiesEntity;
     private List<HibernateProjectsEntity> projects;
     private Map<String, HibernateKnowledgeEntity> knowledges;
+    private HibernateCompaniesEntity companiesEntity;
 
     public HibernateDevelopersEntity() {
 
     }
 
-    public HibernateDevelopersEntity(int id, String firstName, String lastName, HibernateSpecialitiesEntity hibernateSpecialitiesEntity, Integer experience) {
+    public HibernateDevelopersEntity(int id, String firstName, String lastName, HibernateSpecialitiesEntity hibernateSpecialitiesEntity, Integer experience, HibernateCompaniesEntity companiesEntity) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.experience = experience;
         this.hibernateSpecialitiesEntity = hibernateSpecialitiesEntity;
+        this.companiesEntity = companiesEntity;
 
     }
 
-    public HibernateDevelopersEntity(String firstName, String lastName, HibernateSpecialitiesEntity hibernateSpecialitiesEntity, Integer experience) {
+    public HibernateDevelopersEntity(String firstName, String lastName, HibernateSpecialitiesEntity hibernateSpecialitiesEntity, Integer experience, HibernateCompaniesEntity companiesEntity) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.experience = experience;
         this.hibernateSpecialitiesEntity = hibernateSpecialitiesEntity;
+        this.companiesEntity = companiesEntity;
+    }
+    @ManyToOne
+    @JoinColumn(name = "COMPANY", referencedColumnName = "COMPANY_NAME")
+    public HibernateCompaniesEntity getCompaniesEntity() {
+        return companiesEntity;
+    }
 
+    public void setCompaniesEntity(HibernateCompaniesEntity companiesEntity) {
+        this.companiesEntity = companiesEntity;
     }
 
     @ManyToOne
@@ -97,6 +108,8 @@ public class HibernateDevelopersEntity {
         this.projects = projects;
     }
 
+    @OneToMany
+    @JoinColumn(name = "id", referencedColumnName = "developerid")
     public Map<String, HibernateKnowledgeEntity> getKnowledges() {
         return knowledges;
     }
@@ -133,7 +146,7 @@ public class HibernateDevelopersEntity {
 
     @Override
     public String toString() {
-    details = "HibernateDevelopersEntity{" +
+        details = "HibernateDevelopersEntity{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -143,12 +156,17 @@ public class HibernateDevelopersEntity {
 
         Optional<List<HibernateProjectsEntity>> optionalList = Optional.ofNullable(projects);
         optionalList.ifPresent(list -> {
-            details+=list.toString();
+            details += list.toString();
         });
 
         Optional<Map<String, HibernateKnowledgeEntity>> optionalList2 = Optional.ofNullable(knowledges);
         optionalList2.ifPresent(map -> {
-            details+=map.toString();
+            details += map.toString();
+        });
+
+        Optional<HibernateCompaniesEntity> optionalCompany = Optional.ofNullable(companiesEntity);
+        optionalCompany.ifPresent(company -> {
+            details += company.toString();
         });
 
         return details;

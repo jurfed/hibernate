@@ -1,7 +1,4 @@
-import entities.HibernateDevelopersEntity;
-import entities.HibernateKnowledgeEntity;
-import entities.HibernateProjectsEntity;
-import entities.HibernateSpecialitiesEntity;
+import entities.*;
 import org.hibernate.*;
 import org.hibernate.loader.custom.sql.SQLCustomQuery;
 import org.hibernate.loader.custom.sql.SQLQueryParser;
@@ -65,6 +62,7 @@ public class Main {
         tx = session.beginTransaction();
         int developerId = ((HibernateDevelopersEntity) session.createQuery("from HibernateDevelopersEntity").list().get(0)).getId();
 
+        //!!!!!!!!!
         hibernateDevelopersEntity = session.get(HibernateDevelopersEntity.class, developerId);
         hibernateDevelopersEntity.setLastName("Kukushkin");
         session.update(hibernateDevelopersEntity);
@@ -138,6 +136,28 @@ public class Main {
         System.out.println("with knowledge's map: \n");
         main.developersList();
 
+        //7 add company entity many to one
+        session = getSession();
+        tx = session.beginTransaction();
+        HibernateCompaniesEntity hibernateCompaniesEntity = new HibernateCompaniesEntity("Company 1");
+        query = session.createQuery("from HibernateDevelopersEntity");
+        dev = (HibernateDevelopersEntity) ((HibernateDevelopersEntity) query.list().get(0));
+        dev.setCompaniesEntity(hibernateCompaniesEntity);
+        session.save(dev);
+        dev = (HibernateDevelopersEntity) ((HibernateDevelopersEntity) query.list().get(1));
+        dev.setCompaniesEntity(hibernateCompaniesEntity);
+        session.save(dev);
+
+        hibernateCompaniesEntity = new HibernateCompaniesEntity("Company 2");
+        session.save(hibernateCompaniesEntity);
+        dev = (HibernateDevelopersEntity) ((HibernateDevelopersEntity) query.list().get(2));
+        dev.setCompaniesEntity(hibernateCompaniesEntity);
+        session.save(dev);
+        tx.commit();
+        session.close();
+        System.out.println("with company manu to one: \n");
+        main.developersList();
+
         System.out.println();
     }
 
@@ -156,7 +176,7 @@ public class Main {
         session = getSession();
         Transaction tx = session.beginTransaction();
 
-        HibernateDevelopersEntity hibernateDevelopersEntity = new HibernateDevelopersEntity(firstName, lastName, speciality, experience);
+        HibernateDevelopersEntity hibernateDevelopersEntity = new HibernateDevelopersEntity(firstName, lastName, speciality, experience, null);
         session.save(hibernateDevelopersEntity);
 
         tx.commit();

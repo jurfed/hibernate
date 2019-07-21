@@ -8,6 +8,7 @@
         <meta attribute="class-description">
             This class contains the user detail.
         </meta>
+
         <id name="id">
             <column name="id" sql-type="integer"/>
             <generator class="identity"/>
@@ -38,6 +39,8 @@
             <index column="KNOWLEDGE_NAME" type="java.lang.String"/>
             <one-to-many class="entities.HibernateKnowledgeEntity"/>
         </map>
+
+        <many-to-one name="companiesEntity" column="COMPANY" class="entities.HibernateCompaniesEntity" cascade="all"/>
 
     </class>
 </hibernate-mapping>
